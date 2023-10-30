@@ -23,14 +23,12 @@ def main():
 
     # Incantations
     if op == "2" or op == "spells":
-        # op_spells = input("Which spell in particular?: (Press 'L' to check list): " )
-        op_spells = "disarming-charm"
+        op_spells = input("Which spell in particular?: (Press 'L' to check list): " ).lower()
         console.print(get_spells(op_spells))
 
     # Potions
     if op == "3" or op == "potions":
         op_potions = input("Which potion in particular?: (Press 'L' to check list): " )
-        op_potions = "Mopsus Potion"
         console.print(get_potions(op_potions))
 
 
@@ -65,6 +63,23 @@ def validate_spell(spell):
     spell_joined_name = ''.join(i if i.isalpha() else '-' for i in spell)
     spell_name = spell_joined_name.lower()
     return spell_name
+
+
+def validate_potion(potion):
+    # Validate spell format and check in database
+    check_potion = potion.replace("-", "")
+    check_potion = check_potion.replace(" ", "")
+    
+    for i in check_potion:
+        if not i.isalpha():
+            raise ValueError("Invalid name, numbers are not accepted")
+        else:
+            continue
+
+    # Return validated name
+    potion_joined_name = ''.join(i if i.isalpha() else '-' for i in potion)
+    potion_name = potion_joined_name.lower()
+    return potion_name
 
 def get_house(name, surname):
     # Validate name
@@ -175,12 +190,16 @@ def get_potions(potion):
         return potions_list
     
     else:
+        # Validate potion
+        potion = potion.strip()
+        potion_name = validate_potion(potion)
+
         # Get potions database
         potions_db = requests.get(url=f"https://api.potterdb.com/v1/potions/").json()
 
         # Extract and return potion effects
         for i in potions_db["data"]:
-            if i["attributes"]["name"] == potion:
+            if i["attributes"]["slug"] == potion_name:
                 potion_effect = i["attributes"]["effect"]
             else:
                 continue
