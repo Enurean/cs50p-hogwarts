@@ -23,13 +23,14 @@ def main():
 
     # Incantations
     if op == "2" or op == "spells":
-        op_spells = input("Which spell in particular?: (Press 'L' to check list): " ).lower()
+        # op_spells = input("Which spell in particular?: (Press 'L' to check list): " )
+        op_spells = "disarming-charm"
         console.print(get_spells(op_spells))
 
     # Potions
     if op == "3" or op == "potions":
-        # op_potions = input("Which potion in particular?: (Press 'L' to check list): " ).lower()
-        op_potions = "felix-felicis"
+        op_potions = input("Which potion in particular?: (Press 'L' to check list): " )
+        op_potions = "Mopsus Potion"
         console.print(get_potions(op_potions))
 
 
@@ -48,7 +49,22 @@ def validate_name(wizard):
     wizard_joined_name = ''.join(char if char.isalpha() else '-' for char in wizard)
     wizard_name = wizard_joined_name.lower()
     return wizard_name
+
+def validate_spell(spell):
+    # Validate spell format and check in database
+    check_spell = spell.replace("-", "")
+    check_spell = check_spell.replace(" ", "")
     
+    for i in check_spell:
+        if not i.isalpha():
+            raise ValueError("Invalid name, numbers are not accepted")
+        else:
+            continue
+
+    # Return validated name
+    spell_joined_name = ''.join(i if i.isalpha() else '-' for i in spell)
+    spell_name = spell_joined_name.lower()
+    return spell_name
 
 def get_house(name, surname):
     # Validate name
@@ -111,46 +127,52 @@ def get_boggart(name, surname):
     
 
 def get_spells(spell):
+
     # Request list of spells to database
     if spell == "l":
-        spells_list = requests.get(url=f"https://api.potterdb.com/v1/spells/").json()
-        list_spells = []
+        spells_db = requests.get(url=f"https://api.potterdb.com/v1/spells/").json()
+        spells_list = []
 
-        for spell in spells_list["data"]:
-            if str(spell["attributes"]["incantation"]) == "None":
+        for spell in spells_db["data"]:
+            # if str(spell["attributes"]["incantation"]) == "None":
+            if str(spell["attributes"]["name"]) == "None":
                 continue
             else:
-                list_spells.append(spell["attributes"]["incantation"])
+                spells_list.append(spell["attributes"]["name"])
 
-        return list_spells
+        return spells_list
     
     else:
+        # Validate spell
+        spell = spell.strip()
+        spell_name = validate_spell(spell)
+
         # Return spell's effect
-        spells_list = requests.get(url=f"https://api.potterdb.com/v1/spells/").json()
-        list_spells = []
+        spells_db = requests.get(url=f"https://api.potterdb.com/v1/spells/").json()
 
-        for spell in spells_list["data"]:
-            if str(spell["attributes"]["incantation"]) == "None":
-                continue
+        for i in spells_db["data"]:
+            if i["attributes"]["slug"] == spell_name:
+                spell_effect = i["attributes"]["effect"]
             else:
-                list_spells.append(spell["attributes"]["incantation"])
+                continue
 
-        return spell["attributes"]["effect"]
+        # return f"The {spell_name} you submitted is actually an incantation, the spell is called {spell_name}, which causes {spell_effect}"
+        return spell_effect
     
 
 def get_potions(potion):
     # Request list of potions to database
     if potion == "l":
-        potions_list = requests.get(url=f"https://api.potterdb.com/v1/potions/").json()
-        list_potions = []
+        potions_db = requests.get(url=f"https://api.potterdb.com/v1/potions/").json()
+        potions_list = []
 
-        for potion in potions_list["data"]:
+        for potion in potions_db["data"]:
             if str(potion["attributes"]["name"]) == "None":
                 continue
             else:
-                list_potions.append(potion["attributes"]["name"])
+                potions_list.append(potion["attributes"]["name"])
 
-        return list_potions
+        return potions_list
     
     else:
         # Get potions database
@@ -158,13 +180,12 @@ def get_potions(potion):
 
         # Extract and return potion effects
         for i in potions_db["data"]:
-            if i["attributes"]["slug"] == potion:
+            if i["attributes"]["name"] == potion:
                 potion_effect = i["attributes"]["effect"]
             else:
                 continue
 
         return potion_effect
-
 
 
 if __name__ == "__main__":
