@@ -91,12 +91,15 @@ def get_house(name, surname):
 
     # Check if wizard name is in database and return results
     if wizard_name in json.dumps(wizard_db):
-        house = json.dumps(wizard_db["data"]["attributes"]["house"], sort_keys=True, indent=4)
-        if house == "null":
-            return f"{wizard}.title() is no wizard"
-        return house
+        try:
+            house = json.dumps(wizard_db["data"]["attributes"]["house"], sort_keys=True, indent=4)
+            if house == "null":
+                return f"{wizard}.title() is no wizard"
+            return house
+        except KeyError:
+            return f"{wizard.title()} not found in database"
     else:
-        return f"{wizard}.title() not found in database"
+        return f"{wizard.title()} not found in database"
     
 
 def get_patronus(name, surname):
@@ -109,13 +112,16 @@ def get_patronus(name, surname):
 
     # Check if wizard name is in database and return results
     if wizard_name in json.dumps(wizard_db):
-        patronus = json.dumps(wizard_db["data"]["attributes"]["patronus"], sort_keys=True, indent=4)
-        if patronus == "null":
-            return f"{wizard.title()} has not yet discovered its patronus form"
-        else:
-            return patronus
+        try:
+            patronus = json.dumps(wizard_db["data"]["attributes"]["patronus"], sort_keys=True, indent=4)
+            if patronus == "null":
+                return f"{wizard.title()} has not yet discovered its patronus form"
+            else:
+                return patronus
+        except KeyError:
+            return f"{wizard.title()} not found in database"
     else:
-        return "Character not found in database"
+        return f"{wizard.title()} not found in database"
     
 
 def get_boggart(name, surname):
@@ -199,12 +205,16 @@ def get_potions(potion):
 
         # Extract and return potion effects
         for i in potions_db["data"]:
-            if i["attributes"]["slug"] == potion_name:
-                potion_effect = i["attributes"]["effect"]
-            else:
-                continue
-
-        return potion_effect
+            try:
+                if i["attributes"]["slug"] == potion_name:
+                    potion_effect = i["attributes"]["effect"]
+                else:
+                    continue
+            
+                return potion_effect
+            
+            except:
+                return f"The {potion_name} you submitted was not found in the database"
 
 
 if __name__ == "__main__":
