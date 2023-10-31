@@ -17,8 +17,11 @@ def test_get_patronus():
 
 
 def test_get_house():
-    get_house("cedric", "diggory") == ["Ravenclaw"]
+    get_house("cedric", "diggory") == "Hufflepuff"
 
 
 def test_get_potions():
     get_potions("felix-felicis") == "Makes the drinker lucky"
+
+    with pytest.raises(ValueError):
+        get_potions("f3lix-f3l1c1s")

@@ -94,7 +94,7 @@ def get_house(first_name, last_name):
         try:
             house = json.dumps(wizard_db["data"]["attributes"]["house"], sort_keys=True, indent=4)
             if house == "null":
-                return f"{wizard}.title() is no wizard"
+                return f"{wizard.title()} is no wizard"
             return house
         except KeyError:
             return f"{wizard.title()} not found in database"
@@ -137,11 +137,11 @@ def get_boggart(first_name, last_name):
         if wizard_name in json.dumps(wizard_db):
             boggart = json.dumps(wizard_db["data"]["attributes"]["boggart"], sort_keys=True, indent=4)
             if boggart == "null":
-                return f"{wizard}.title() has not yet discovered what form a boggart would take"
+                return f"{wizard.title()} has not yet discovered what form a boggart would take"
             else:
                 return boggart
         else:
-            return f"{wizard}.title() not found in database"
+            return f"{wizard.title()} not found in database"
         
     except KeyError:
         return f"{wizard.title()} not found in database"
