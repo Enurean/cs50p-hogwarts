@@ -1,5 +1,5 @@
 ## Harry Potter Queries
-### Video Demo:  <URL>
+### Video Demo: https://youtu.be/1o4qRGxYVR8
 ### Description: Make different queries to learn about wizards, spells or potions in the world of the "boy who lived"
 
 I wanted to showcase some of what I learned through CS50P, and I thought of no better way of doing it than following on the steps of what proffesor Malan did, based the work on the world of Harry Potter.
