@@ -10,16 +10,16 @@ def main():
     
     # Wizards
     if op == "1" or op == "wizards":
-        name = input("What's the first name of the wizard you are interested in?: ")
-        surname = input("And the surname?: ")
+        first_name = input("What's the first name of the wizard you are interested in?: ")
+        last_name = input("And the last name?: ")
         op_wizards = input("What is it that you wish to know about: (1.House, 2.Patronus, 3.Boggart)? " )
 
         if op_wizards == "1":
-            console.print(get_house(name, surname))
+            console.print(get_house(first_name, last_name))
         elif op_wizards == "2":
-            console.print(get_patronus(name, surname))
+            console.print(get_patronus(first_name, last_name))
         elif op_wizards == "3":
-            console.print(get_boggart(name, surname))
+            console.print(get_boggart(first_name, last_name))
 
     # Incantations
     if op == "2" or op == "spells":
@@ -81,9 +81,9 @@ def validate_potion(potion):
     potion_name = potion_joined_name.lower()
     return potion_name
 
-def get_house(name, surname):
+def get_house(first_name, last_name):
     # Validate name
-    wizard = name.strip() + " " + surname.strip()
+    wizard = first_name.strip() + " " + last_name.strip()
     wizard_name = validate_name(wizard)
 
     # Request info about wizard to database
@@ -102,9 +102,9 @@ def get_house(name, surname):
         return f"{wizard.title()} not found in database"
     
 
-def get_patronus(name, surname):
+def get_patronus(first_name, last_name):
     # Validate name
-    wizard = name.strip() + " " + surname.strip()
+    wizard = first_name.strip() + " " + last_name.strip()
     wizard_name = validate_name(wizard)
 
     # Request info about wizard to database
@@ -124,10 +124,10 @@ def get_patronus(name, surname):
         return f"{wizard.title()} not found in database"
     
 
-def get_boggart(name, surname):
+def get_boggart(first_name, last_name):
     try:
         # Validate name
-        wizard = name.strip() + " " + surname.strip()
+        wizard = first_name.strip() + " " + last_name.strip()
         wizard_name = validate_name(wizard)
 
         # Request info about wizard to database
@@ -148,7 +148,6 @@ def get_boggart(name, surname):
     
 
 def get_spells(spell):
-
     # Request list of spells to database
     if spell == "l":
         spells_db = requests.get(url=f"https://api.potterdb.com/v1/spells/").json()
