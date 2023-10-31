@@ -12,13 +12,13 @@ def main():
     if op == "1" or op == "wizards":
         first_name = input("What's the first name of the wizard you are interested in?: ")
         last_name = input("And the last name?: ")
-        op_wizards = input("What is it that you wish to know about: (1.House, 2.Patronus, 3.Boggart)? " )
+        op_wizards = input("What is it that you wish to know about: (1.House, 2.Patronus, 3.Boggart)? " ).lower()
 
-        if op_wizards == "1":
+        if op_wizards == "1" or op_wizards == "wizards":
             console.print(get_house(first_name, last_name))
-        elif op_wizards == "2":
+        elif op_wizards == "2" or op_wizards == "patronus":
             console.print(get_patronus(first_name, last_name))
-        elif op_wizards == "3":
+        elif op_wizards == "3" or op_wizards == "boggart":
             console.print(get_boggart(first_name, last_name))
 
     # Incantations
